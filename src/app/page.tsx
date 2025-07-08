@@ -1,103 +1,208 @@
-import Image from "next/image";
+'use client'
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/navigation'; // Importe o useRouter
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import LoginModal from '@/components/auth/LoginModal';
+import CategoryCard from '@/components/CategoryCard';
+import ProductCard from '@/components/ProductCard';
+import { Category, Product } from '@/types';
 
-export default function Home() {
+interface Category {
+  id: number;
+  name: string;
+}
+
+const Home: React.FC = () => {
+  const router = useRouter(); // Instancie o router
+  const [cartCount, setCartCount] = useState<number>(0);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Carrinho vazio, pois não temos produtos para listar aqui
+  const [cartItems] = useState<Product[]>([]);
+
+  // Função para buscar categorias da API
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch("https://devxstore.onrender.com/api/categories");
+      
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar categorias: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setCategories(data);
+    } catch (err) {
+      console.error('Erro ao buscar categorias:', err);
+      setError('Erro ao carregar categorias. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect para buscar categorias quando o componente monta
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  // Função para lidar com clique na categoria
+  const handleCategoryClick = (categoryId: number) => {
+    // Navegar para a página de produtos da categoria
+    router.push(`/category/${categoryId}`);
+  };
+
+  const addToCart = () => {
+    setCartCount(prevCount => prevCount + 1);
+  };
+
+  const handleLogin = (email: string) => {
+    setIsLoggedIn(true);
+    setUsername(email.split('@')[0]);
+    setShowLoginModal(false);
+  };
+
+  const handleRegister = (name: string) => {
+    setIsLoggedIn(true);
+    setUsername(name);
+    setShowLoginModal(false);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername('');
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="min-h-screen bg-gray-50">
+      <Head>
+        <title>TechPro - Equipamentos para Programadores</title>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+      </Head>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <Header
+        cartCount={cartCount}
+        isLoggedIn={isLoggedIn}
+        username={username}
+        onLogout={handleLogout}
+        onLoginClick={() => setShowLoginModal(true)}
+        cartItems={cartItems}
+      />
+
+      {showLoginModal && (
+        <LoginModal
+          show={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          onLogin={handleLogin}
+          onRegister={handleRegister}
+        />
+      )}
+
+      <main className="pt-16 pb-12">
+        {/* Hero Banner */}
+        <div className="relative h-[500px] overflow-hidden">
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-blue-900 to-transparent"
+            style={{
+              backgroundImage: `url('https://readdy.ai/api/search-image?query=Modern%20workspace%20with%20high-end%20computer%20setup%2C%20programmer%20desk%20with%20multiple%20monitors%2C%20keyboard%2C%20and%20programming%20books%2C%20soft%20ambient%20lighting%20with%20blue%20tones%2C%20clean%20minimalist%20design%2C%20high%20resolution%20photography&width=1440&height=500&seq=16&orientation=landscape')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'multiply',
+            }}
+          ></div>
+          <div className="container mx-auto px-4 h-full flex items-center relative z-10">
+            <div className="max-w-2xl text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                Equipamentos de alta performance para programadores
+              </h1>
+              <p className="text-xl mb-8">
+                Encontre as melhores ferramentas para maximizar sua
+                produtividade e conforto no desenvolvimento de software.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="#products"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-150 cursor-pointer whitespace-nowrap"
+                >
+                  Ver Produtos
+                </a>
+                <a
+                  href="#categories"
+                  className="bg-white hover:bg-gray-100 text-blue-600 px-6 py-3 rounded-md font-medium transition duration-150 cursor-pointer whitespace-nowrap"
+                >
+                  Saiba Mais
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Categorias */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+              Categorias
+            </h2>
+            
+            {loading && (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p className="mt-2 text-gray-600">Carregando categorias...</p>
+              </div>
+            )}
+
+            {error && (
+              <div className="text-center py-8">
+                <p className="text-red-600 mb-4">{error}</p>
+                <button
+                  onClick={fetchCategories}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-150"
+                >
+                  Tentar Novamente
+                </button>
+              </div>
+            )}
+
+            {!loading && !error && categories.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                {categories.map(category => (
+                  <CategoryCard 
+                    key={category.id} 
+                    category={category} 
+                    // Adicione o manipulador de clique
+                    onClick={() => handleCategoryClick(category.id)} 
+                  />
+                ))}
+              </div>
+            )}
+
+            {!loading && !error && categories.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Nenhuma categoria encontrada.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Produtos em Destaque */}
+        <ProductCard />
+
+        {/* ... restante do código ... */}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <Footer />
     </div>
   );
-}
+};
+
+export default Home;
