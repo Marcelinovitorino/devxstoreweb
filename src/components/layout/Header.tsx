@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import CartDropdown from './CartDropdown';
 import UserDropdown from '../ui/UserDropdown';
-import { Product } from '@/types';
-import Link from 'next/link'; // ✅ Correção aqui
-
+import Link from 'next/link';
+import { CartItem } from '@/types'; // importe o tipo correto
 
 interface HeaderProps {
   cartCount: number;
@@ -12,7 +11,7 @@ interface HeaderProps {
   username: string;
   onLogout: () => void;
   onLoginClick: () => void;
-  cartItems: Product[];
+  cartItems: CartItem[];  // <-- aqui mudou de Product[] para CartItem[]
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -36,7 +35,6 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-blue-600">DevxStore</Link>
 
@@ -59,15 +57,15 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Ícones de ações */}
         <div className="flex items-center space-x-6">
-          <a href="/products" className="text-gray-700 hover:text-blue-600">Produtos</a>
-          <a href="/contacto" className="text-gray-700 hover:text-blue-600 whitespace-nowrap">
+          <Link href="/products" className="text-gray-700 hover:text-blue-600">Produtos</Link>
+          <Link href="/contacto" className="text-gray-700 hover:text-blue-600 whitespace-nowrap">
             Contacto
-          </a>
+          </Link>
 
           {/* Ícone de favoritos */}
-          <a href="/favoritos" className="text-gray-700 hover:text-blue-600 text-xl">
+          <Link href="/favoritos" className="text-gray-700 hover:text-blue-600 text-xl">
             <i className="fas fa-heart"></i>
-          </a>
+          </Link>
 
           {/* Login/Usuário */}
           {isLoggedIn ? (

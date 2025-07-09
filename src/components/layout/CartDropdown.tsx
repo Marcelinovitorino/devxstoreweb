@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
-import { Product } from '@/types';
+import { CartItem } from '@/types';
 
 interface CartDropdownProps {
   cartCount: number;
-  cartItems: Product[];
+  cartItems: CartItem[];
   onClose: () => void;
 }
 
@@ -15,7 +15,7 @@ const currencyFormatter = new Intl.NumberFormat('pt-MZ', {
 
 const CartDropdown: React.FC<CartDropdownProps> = ({ cartCount, cartItems, onClose }) => {
   const getTotal = () => {
-    return cartItems.reduce((total, item) => total + Number(item.price), 0);
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   return (
@@ -42,7 +42,9 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ cartCount, cartItems, onClo
               />
               <div className="ml-3 flex-1">
                 <p className="text-sm font-medium truncate">{item.name}</p>
-                <p className="text-xs text-gray-500">1 x {currencyFormatter.format(item.price)}</p>
+                <p className="text-xs text-gray-500">
+                  {item.quantity} x {currencyFormatter.format(item.price)}
+                </p>
               </div>
             </div>
           ))

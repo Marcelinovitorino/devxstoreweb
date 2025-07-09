@@ -3,12 +3,12 @@ import React from 'react';
 import Image from 'next/image';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { Product } from '@/types';
-
 interface ProductCardProps {
   product: Product;
+  onAddToCart?: () => void; // nova prop opcional
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const formattedPrice = `MT ${product.price}`;
   const hasImage = product.images?.length > 0;
 
@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <p className="text-blue-600 text-xl font-bold mb-4">{formattedPrice}</p>
 
         <div className="flex space-x-2 mt-auto">
-          <button
+          <button onClick={onAddToCart} 
             className="flex-1 py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition flex items-center justify-center"
           >
             <ShoppingCart className="w-4 h-4 mr-2" />
