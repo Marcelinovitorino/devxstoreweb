@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/navigation'; // Importe o useRouter
+import { useRouter } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import LoginModal from '@/components/auth/LoginModal';
@@ -15,7 +15,7 @@ interface Category {
 }
 
 const Home: React.FC = () => {
-  const router = useRouter(); // Instancie o router
+  const router = useRouter();
   const [cartCount, setCartCount] = useState<number>(0);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
@@ -23,21 +23,18 @@ const Home: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Carrinho vazio, pois não temos produtos para listar aqui
   const [cartItems] = useState<Product[]>([]);
 
-  // Função para buscar categorias da API
   const fetchCategories = async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await fetch("https://devxstore.onrender.com/api/categories");
-      
+
       if (!response.ok) {
         throw new Error(`Erro ao buscar categorias: ${response.status}`);
       }
-      
+
       const data = await response.json();
       setCategories(data);
     } catch (err) {
@@ -48,19 +45,12 @@ const Home: React.FC = () => {
     }
   };
 
-  // useEffect para buscar categorias quando o componente monta
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  // Função para lidar com clique na categoria
   const handleCategoryClick = (categoryId: number) => {
-    // Navegar para a página de produtos da categoria
     router.push(`/category/${categoryId}`);
-  };
-
-  const addToCart = () => {
-    setCartCount(prevCount => prevCount + 1);
   };
 
   const handleLogin = (email: string) => {
@@ -148,12 +138,12 @@ const Home: React.FC = () => {
         </div>
 
         {/* Categorias */}
-        <section className="py-12 bg-white">
+        <section className="py-12 bg-white" id="categories">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
               Categorias
             </h2>
-            
+
             {loading && (
               <div className="text-center py-8">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -176,11 +166,10 @@ const Home: React.FC = () => {
             {!loading && !error && categories.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                 {categories.map(category => (
-                  <CategoryCard 
-                    key={category.id} 
-                    category={category} 
-                    // Adicione o manipulador de clique
-                    onClick={() => handleCategoryClick(category.id)} 
+                  <CategoryCard
+                    key={category.id}
+                    category={category}
+                    onClick={() => handleCategoryClick(category.id)}
                   />
                 ))}
               </div>
@@ -196,8 +185,6 @@ const Home: React.FC = () => {
 
         {/* Produtos em Destaque */}
         <ProductCard />
-
-        {/* ... restante do código ... */}
       </main>
 
       <Footer />
