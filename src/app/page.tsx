@@ -7,16 +7,11 @@ import Footer from '@/components/layout/Footer';
 import LoginModal from '@/components/auth/LoginModal';
 import CategoryCard from '@/components/CategoryCard';
 import ProductCard from '@/components/ProductCard';
-import { Category, Product } from '@/types';
-
-interface Category {
-  id: number;
-  name: string;
-}
+import { Category } from '@/types'; // apenas Category necessário aqui
 
 const Home: React.FC = () => {
   const router = useRouter();
-  const [cartCount] = useState<number>(0); // Só usei cartCount, setCartCount removido porque não usado
+  const [cartCount] = useState<number>(0);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
@@ -85,7 +80,7 @@ const Home: React.FC = () => {
         username={username}
         onLogout={handleLogout}
         onLoginClick={() => setShowLoginModal(true)}
-        cartItems={[]} // Passa array vazio, pois cartItems não está no estado
+        cartItems={[]}
       />
 
       {showLoginModal && (
@@ -115,8 +110,7 @@ const Home: React.FC = () => {
                 Equipamentos de alta performance para programadores
               </h1>
               <p className="text-xl mb-8">
-                Encontre as melhores ferramentas para maximizar sua
-                produtividade e conforto no desenvolvimento de software.
+                Encontre as melhores ferramentas para maximizar sua produtividade e conforto no desenvolvimento de software.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a

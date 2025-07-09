@@ -82,21 +82,6 @@ const ProductCard = () => {
     });
   };
 
-  const updateCartQuantity = (id: number, quantity: number) => {
-    if (quantity <= 0) {
-      setCart(prevCart => prevCart.filter(item => item.id !== id));
-    } else {
-      setCart(prevCart =>
-        prevCart.map(item =>
-          item.id === id ? { ...item, quantity } : item
-        )
-      );
-    }
-  };
-
-  const getTotalPrice = () =>
-    cart.reduce((total, item) => total + item.price * item.quantity, 0);
-
   const getTotalItems = () =>
     cart.reduce((total, item) => total + item.quantity, 0);
 
