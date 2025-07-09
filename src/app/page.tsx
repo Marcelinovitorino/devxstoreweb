@@ -132,49 +132,49 @@ const Home: React.FC = () => {
 
         {/* Categorias */}
         <section className="py-12 bg-white" id="categories">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-              Categorias
-            </h2>
+  <div className="container mx-auto px-4">
+    <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+      Categorias
+    </h2>
 
-            {loading && (
-              <div className="text-center py-8">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-gray-600">Carregando categorias...</p>
-              </div>
-            )}
+    {loading && (
+      <div className="text-center py-8">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <p className="mt-2 text-gray-600">Carregando categorias...</p>
+      </div>
+    )}
 
-            {error && (
-              <div className="text-center py-8">
-                <p className="text-red-600 mb-4">{error}</p>
-                <button
-                  onClick={fetchCategories}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-150"
-                >
-                  Tentar Novamente
-                </button>
-              </div>
-            )}
+    {error && (
+      <div className="text-center py-8">
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={fetchCategories}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-150"
+        >
+          Tentar Novamente
+        </button>
+      </div>
+    )}
 
-            {!loading && !error && categories.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                {categories.map(category => (
-                  <CategoryCard
-                    key={category.id}
-                    category={category}
-                    onClick={() => handleCategoryClick(category.id)}
-                  />
-                ))}
-              </div>
-            )}
+    {!loading && !error && categories.length > 0 && (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        {categories.map(category => (
+          <CategoryCard
+            key={category.id}
+            category={category}
+            onClick={() => handleCategoryClick(category.id)}
+          />
+        ))}
+      </div>
+    )}
 
-            {!loading && !error && categories.length === 0 && (
-              <div className="text-center py-8">
-                <p className="text-gray-600">Nenhuma categoria encontrada.</p>
-              </div>
-            )}
-          </div>
-        </section>
+    {!loading && !error && categories.length === 0 && (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Nenhuma categoria encontrada.</p>
+      </div>
+    )}
+  </div>
+</section>
 
         {/* Produtos em Destaque */}
         <ProductCard />
