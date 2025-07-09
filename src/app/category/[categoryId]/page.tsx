@@ -12,6 +12,20 @@ const CategoryPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState('');
+  const [cart, setCart] = useState<Product[]>([]);
+
+  
+
+    // Estados do usuário
+    const [cartCount, setCartCount] = useState<number>(0);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [username, setUsername] = useState<string>('');
+  
+    // Funções de autenticação
+    const handleLogout = () => {
+      setIsLoggedIn(false);
+      setUsername('');
+    };
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
@@ -42,7 +56,14 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+            <Header
+        cartCount={cartCount}
+        isLoggedIn={isLoggedIn}
+        username={username}
+        onLogout={handleLogout}
+        onLoginClick={() => {}}
+        cartItems={cart}
+      />
       
       <main className="pt-16 pb-12 container mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-800 mb-8 mt-6">
