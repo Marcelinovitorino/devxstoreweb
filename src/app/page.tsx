@@ -16,14 +16,13 @@ interface Category {
 
 const Home: React.FC = () => {
   const router = useRouter();
-  const [cartCount, setCartCount] = useState<number>(0);
+  const [cartCount] = useState<number>(0); // Só usei cartCount, setCartCount removido porque não usado
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [cartItems] = useState<Product[]>([]);
 
   const fetchCategories = async () => {
     try {
@@ -86,7 +85,7 @@ const Home: React.FC = () => {
         username={username}
         onLogout={handleLogout}
         onLoginClick={() => setShowLoginModal(true)}
-        cartItems={cartItems}
+        cartItems={[]} // Passa array vazio, pois cartItems não está no estado
       />
 
       {showLoginModal && (

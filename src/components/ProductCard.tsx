@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ShoppingCart, ArrowLeft, Plus, Minus, Eye } from 'lucide-react';
+import { ShoppingCart, Eye } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -20,7 +20,7 @@ interface CartItem {
   image: string;
 }
 
-// ✅ Formatador em Meticais Moçambicanos
+// Formatador em Meticais Moçambicanos
 const currencyFormatter = new Intl.NumberFormat('pt-MZ', {
   style: 'currency',
   currency: 'MZN',
