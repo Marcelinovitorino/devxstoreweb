@@ -63,6 +63,7 @@ const Products = () => {
   const [cartCount, setCartCount] = useState<number>(0);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
+   // `setCart` removido
 
   // Funções de autenticação
   const handleLogout = () => {
@@ -90,7 +91,8 @@ const Products = () => {
         
         // Definir faixa de preço dinâmica
         if (productsWithNumberPrice.length > 0) {
-          const prices = productsWithNumberPrice.map(p => p.price);
+          const prices = productsWithNumberPrice.map((p: Product) => p.price);
+
           setPriceRange({
             min: Math.min(...prices),
             max: Math.max(...prices)
