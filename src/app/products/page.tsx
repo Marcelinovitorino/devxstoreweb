@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import {
   ShoppingCart,
   ArrowLeft,
@@ -67,8 +68,6 @@ const Products = () => {
   const [cartCount, setCartCount] = useState<number>(0);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
 
   // Funções de autenticação
   const handleLogout = () => {
@@ -206,11 +205,6 @@ const Products = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  // Calcular total de itens
-  const getTotalItems = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
-  };
-
   // Componente de item do produto
   const ProductItem = ({ 
     product, 
@@ -236,9 +230,11 @@ const Products = () => {
           <div className="flex">
             <div className="w-48 h-32 flex-shrink-0">
               {hasImage ? (
-                <img
+                <Image
                   src={product.images[0]}
                   alt={product.name}
+                  width={192}
+                  height={128}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -300,9 +296,11 @@ const Products = () => {
       <div className="bg-white rounded-lg shadow-sm overflow-hidden transition duration-300 hover:shadow-lg h-full flex flex-col">
         <div className="relative flex-grow">
           {hasImage ? (
-            <img
+            <Image
               src={product.images[0]}
               alt={product.name}
+              width={300}
+              height={256}
               className="w-full h-64 object-cover object-top"
             />
           ) : (
@@ -360,7 +358,7 @@ const Products = () => {
         isLoggedIn={isLoggedIn}
         username={username}
         onLogout={handleLogout}
-        onLoginClick={() => setShowLoginModal(true)}
+        onLoginClick={() => {}}
         cartItems={cart}
       />
 
@@ -420,9 +418,11 @@ const Products = () => {
               <div className="md:flex">
                 <div className="md:w-1/2">
                   {selectedProduct.images?.length > 0 ? (
-                    <img
+                    <Image
                       src={selectedProduct.images[0]}
                       alt={selectedProduct.name}
+                      width={600}
+                      height={384}
                       className="w-full h-96 object-cover object-top"
                     />
                   ) : (
@@ -522,9 +522,11 @@ const Products = () => {
                     {cart.map((item) => (
                       <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg">
                         {item.image ? (
-                          <img
+                          <Image
                             src={item.image}
                             alt={item.name}
+                            width={64}
+                            height={64}
                             className="w-16 h-16 object-cover rounded"
                           />
                         ) : (

@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { ShoppingCart, Eye } from 'lucide-react';
 
 interface Product {
@@ -28,20 +29,14 @@ const currencyFormatter = new Intl.NumberFormat('pt-MZ', {
 
 const ProductCard = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
-        setError(null);
         const res = await fetch("https://devxstore.onrender.com/api/products");
-
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-
         const data = await res.json();
         const productsWithNumberPrice = data.map((p: Product) => ({
           ...p,
@@ -49,10 +44,7 @@ const ProductCard = () => {
         }));
         setProducts(productsWithNumberPrice);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch products');
         console.error("Fetch error:", err);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -161,9 +153,11 @@ const ProductItem = ({
     <div className="bg-white rounded-lg shadow-sm overflow-hidden transition duration-300 hover:shadow-lg flex flex-col h-full">
       <div className="relative flex-shrink-0">
         {hasImage ? (
-          <img
+          <Image
             src={product.images[0]}
             alt={product.name}
+            width={300}
+            height={256}
             className="w-full h-64 object-cover object-top"
           />
         ) : (
