@@ -31,11 +31,6 @@ interface CartItem {
   image: string;
 }
 
-interface Category {
-  id: number;
-  name: string;
-}
-
 const EXCHANGE_RATE = 63.5;
 
 const formatPriceMZN = (priceUSD: number) => {
