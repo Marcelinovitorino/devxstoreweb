@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { CartItem } from '@/types';
+import Image from 'next/image';
 
 interface CartDropdownProps {
   cartCount: number;
@@ -35,7 +36,7 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ cartCount, cartItems, onClo
         ) : (
           cartItems.map(item => (
             <div key={item.id} className="px-4 py-3 flex items-center border-b border-gray-100">
-              <img 
+              <Image
                 src={item.images?.[0] || '/placeholder.png'} 
                 alt={item.name} 
                 className="w-16 h-12 object-cover rounded"
