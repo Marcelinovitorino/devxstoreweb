@@ -6,7 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import LoginModal from '@/components/auth/LoginModal';
 import CategoryCard from '@/components/CategoryCard';
-import ProductCard from '@/components/ProductCard';
+import ProductCard from '@/components/ProductList';
 import { Category } from '@/types'; // apenas Category necessário aqui
 
 const Home: React.FC = () => {
